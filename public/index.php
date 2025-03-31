@@ -10,7 +10,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-    <a class="navbar-brand" href="#"><i class="fa-solid fa-book-tanakh"></i></a>
+    <a class="navbar-brand" href="/"><i class="fa-solid fa-book-tanakh"></i></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -30,13 +30,31 @@
     </div>
 </nav>
 <div class="container">
-<?php if ($_SERVER["REQUEST_URI"] == "/") { ?>
-            Вы на главной странице! =)
-        <?php } elseif ($_SERVER["REQUEST_URI"] == "/tot") { ?>
-            Загадочная, страшная книжка
-        <?php } elseif ($_SERVER["REQUEST_URI"] == "/gigas") { ?>
-            Ну у ребят даже кодекс есть
-        <?php } ?>
+<?php 
+    $url = $_SERVER["REQUEST_URI"];
+
+    #echo "Вы на странице: $url, будьте внимательны!<br>";
+
+    if ($url == "/") {
+        require __DIR__ . "/../views/main.php";
+    } elseif ($url == "/tot") {
+        require __DIR__ . "/../views/tot.php";
+    } elseif ($url == "/gigas") {
+        require __DIR__ . "/../views/gigas.php";
+    }
+
+    if ($url == "/gigas/image") {
+        require __DIR__ . "/../views/gigas_image.php";
+    } elseif ($url == "/gigas/info") {
+        require __DIR__ . "/../views/gigas_info.php";
+    }
+
+    if ($url == "/tot/image") {
+        require __DIR__ . "/../views/tot_image.php";
+    } elseif ($url == "/tot/info") {
+        require __DIR__ . "/../views/tot_info.php";
+    }
+?>
 </div>
 </body>
 </html>
