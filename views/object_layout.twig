@@ -1,0 +1,24 @@
+
+{% extends "_layout.twig" %}
+
+{% block layout_content %}
+    <h1>{{ title }}</h1>
+
+    <div class="mt-4">
+        <nav>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link {% if current_url == tab1_url %}active{% endif %}" href="{{ tab1_url }}">{{ tab1_text }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if current_url == tab2_url %}active{% endif %}" href="{{ tab2_url }}">{{ tab2_text }}</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="mt-4">
+            {% block object_content %}
+                {# Контент будет добавлен в дочерних шаблонах #}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

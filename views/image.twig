@@ -1,0 +1,10 @@
+{% extends "object_layout.twig" %}
+
+{% block object_content %}
+    <ul class="list-group mt-4">
+        <li class="list-group-item text-center">
+            <img src="{{ image_src }}" alt="{{ image_alt }}" width="{{ image_width }}" height="{{ image_height }}">
+            <p class="mt-2">{{ image_alt }}</p>
+        </li>
+    </ul>
+{% endblock %}

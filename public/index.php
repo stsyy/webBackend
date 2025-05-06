@@ -1,60 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"  rel="stylesheet" />
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-book-tanakh"></i></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Главная</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/tot">Книга Тота</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/gigas">Кодекс Гигас</a>
-            </li>
-        </ul>
-        </div>
-    </div>
-</nav>
-<div class="container">
-<?php 
-    $url = $_SERVER["REQUEST_URI"];
+<?php
+require_once '../vendor/autoload.php';
 
-    #echo "Вы на странице: $url, будьте внимательны!<br>";
+require_once "../controllers/MainController.php";
+require_once "../controllers/BayController.php";
+require_once "../controllers/BayImageController.php";
+require_once "../controllers/BayInfoController.php";
+require_once "../controllers/WaveInfoController.php";
+require_once "../controllers/WaveController.php";
+require_once "../controllers/WaveImageController.php";
+require_once "../controllers/Controller404.php";
+$context = []; 
 
-    if ($url == "/") {
-        require __DIR__ . "/../views/main.php";
-    } elseif ($url == "/tot") {
-        require __DIR__ . "/../views/tot.php";
-    } elseif ($url == "/gigas") {
-        require __DIR__ . "/../views/gigas.php";
-    }
+$controller = null;
 
-    if ($url == "/gigas/image") {
-        require __DIR__ . "/../views/gigas_image.php";
-    } elseif ($url == "/gigas/info") {
-        require __DIR__ . "/../views/gigas_info.php";
-    }
+$loader = new \Twig\Loader\FilesystemLoader('../views');
+$twig = new \Twig\Environment($loader);
 
-    if ($url == "/tot/image") {
-        require __DIR__ . "/../views/tot_image.php";
-    } elseif ($url == "/tot/info") {
-        require __DIR__ . "/../views/tot_info.php";
-    }
+$url = $_SERVER["REQUEST_URI"];
+
+$loader = new \Twig\Loader\FilesystemLoader('../views');
+$twig = new \Twig\Environment($loader, [
+    "debug" => true // добавляем тут debug режим
+]);
+$twig->addExtension(new \Twig\Extension\DebugExtension());
+
+$template = "";
+$title = "";
+$image_data = [];
+$tab1_url = "";
+$tab2_url = "";
+$tab1_text = "";
+$tab2_text = "";
+
+$controller = new Controller404($twig);
+$pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
+$books = [
+    [
+        'name' => 'Девятый вал',
+        'base_url' => '/ninthval',
+        'tabs' => [
+            ['url' => '/ninthval/image', 'text' => 'Картинка'],
+            ['url' => '/ninthval/info', 'text' => 'Описание']
+        ],
+        'button_type' => 'dark',
+        'button_extra' => 'd-block mb-3 btn btn-lg w-100 btn-outline-dark text-start p-3'
+    ],
+    [
+        'name' => 'Неаполитанский залив',
+        'base_url' => '/thebayofnaples',
+        'tabs' => [
+            ['url' => '/thebayofnaples/image', 'text' => 'Картинка'],
+            ['url' => '/thebayofnaples/info', 'text' => 'Описание']
+        ],
+        'button_type' => 'dark',
+        'button_extra' => 'd-block mb-3 btn btn-lg w-100 btn-outline-dark text-start p-3'
+    ]
+];
+
+$tabs = [];
+function setTabs($tab1_url, $tab2_url, $tab1_text, $tab2_text) {
+    return [
+        "tab1_url" => $tab1_url,
+        "tab2_url" => $tab2_url,
+        "tab1_text" => $tab1_text,
+        "tab2_text" => $tab2_text,
+    ];
+}
+
+if ($url == "/") {
+    $controller = new MainController($twig);
+} elseif ($url == "/ninthval") {
+    $controller = new WaveController($twig);
+
+} elseif ($url == "/thebayofnaples") {
+    $controller = new BayController($twig);
+} elseif ($url == "/thebayofnaples/image") {
+    $controller = new BayImageController($twig);
+} elseif ($url == "/thebayofnaples/info") {
+    $controller = new BayInfoController($twig);
+} elseif ($url == "/ninthval/image") {
+    $controller = new WaveImageController($twig);
+
+} elseif ($url == "/ninthval/info") {
+    $controller = new WaveInfoController($twig);
+}
+
+// if ($template) {
+//     echo $twig->render($template, array_merge([
+//         "title" => $title,
+//         "current_url" => $url,
+//         'books' => $books
+//     ], $tabs, $image_data));
+// }
+
+if ($controller) {
+    $controller->setPDO($pdo);
+    $controller->get();
+}
+
 ?>
-</div>
-</body>
-</html>
