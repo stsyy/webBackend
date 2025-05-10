@@ -1,7 +1,12 @@
 <?php
 require_once '../vendor/autoload.php';
 
+require_once '../framework/autoload.php';
+
 require_once "../controllers/MainController.php";
+require_once "../controllers/ObjectController.php";
+require_once "../controllers/ImageController.php";
+require_once "../controllers/InfoController.php";
 require_once "../controllers/BayController.php";
 require_once "../controllers/BayImageController.php";
 require_once "../controllers/BayInfoController.php";
@@ -13,15 +18,15 @@ $context = [];
 
 $controller = null;
 
-$loader = new \Twig\Loader\FilesystemLoader('../views');
-$twig = new \Twig\Environment($loader);
-
-$url = $_SERVER["REQUEST_URI"];
+$pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
 
 $loader = new \Twig\Loader\FilesystemLoader('../views');
 $twig = new \Twig\Environment($loader, [
     "debug" => true // добавляем тут debug режим
 ]);
+
+//$url = $_SERVER["REQUEST_URI"];
+
 $twig->addExtension(new \Twig\Extension\DebugExtension());
 
 $template = "";
@@ -32,8 +37,8 @@ $tab2_url = "";
 $tab1_text = "";
 $tab2_text = "";
 
-$controller = new Controller404($twig);
-$pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
+//$controller = new Controller404($twig);
+
 $books = [
     [
         'name' => 'Девятый вал',
@@ -66,24 +71,18 @@ function setTabs($tab1_url, $tab2_url, $tab1_text, $tab2_text) {
         "tab2_text" => $tab2_text,
     ];
 }
+$pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
 
-if ($url == "/") {
+$router = new Router($twig, $pdo);
+$router->add("/", MainController::class);
+$router->add("/theninth_wave/(?P<id>\d+)/image", ImageController::class);
+$router->add("/theninth_wave/(?P<id>\d+)/info", InfoController::class);
+$router->add("/theninth_wave/(?P<id>\d+)", ObjectController::class);
+$router->get_or_default(Controller404::class);
+
+/*if ($url == "/") {
     $controller = new MainController($twig);
-} elseif ($url == "/ninthval") {
-    $controller = new WaveController($twig);
-
-} elseif ($url == "/thebayofnaples") {
-    $controller = new BayController($twig);
-} elseif ($url == "/thebayofnaples/image") {
-    $controller = new BayImageController($twig);
-} elseif ($url == "/thebayofnaples/info") {
-    $controller = new BayInfoController($twig);
-} elseif ($url == "/ninthval/image") {
-    $controller = new WaveImageController($twig);
-
-} elseif ($url == "/ninthval/info") {
-    $controller = new WaveInfoController($twig);
-}
+} */
 
 // if ($template) {
 //     echo $twig->render($template, array_merge([
@@ -93,9 +92,9 @@ if ($url == "/") {
 //     ], $tabs, $image_data));
 // }
 
-if ($controller) {
+/*if ($controller) {
     $controller->setPDO($pdo);
     $controller->get();
-}
+}*/
 
 ?>

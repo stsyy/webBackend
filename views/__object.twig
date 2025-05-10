@@ -1,0 +1,9 @@
+{% extends "_layout.twig" %}
+
+{% block layout_content %}
+<div class="container mt-4">
+    <h1>{{ painting.title }}</h1>
+    <img src="{{ painting.image }}" class="img-fluid" alt="{{ painting.title }}">
+    <p>{{ painting.description }}</p>
+</div>
+{% endblock %}

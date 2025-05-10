@@ -1,4 +1,5 @@
 <?php
+//require_once "TwigBaseController.php"; 
 class BayController extends TwigBaseController {
     public $template = "object_layout.twig";
     public $title = "Неаполитанский залив";

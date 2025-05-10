@@ -1,4 +1,5 @@
 <?php
+//require_once "TwigBaseController.php"; 
 class WaveController extends TwigBaseController {
     public $template = "object_layout.twig";
     public $title = "Девятый вал";
