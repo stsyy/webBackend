@@ -1,6 +1,6 @@
 <?php
-
-class ObjectController extends TwigBaseController {
+require_once "BaseSpaceTwigController.php";
+class ObjectController extends BaseSpaceTwigController {
     public $template = "__object.twig"; // указываем шаблон
     public $books = [];       // даже если не используется
     public $tabs = [];
