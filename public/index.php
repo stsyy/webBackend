@@ -18,7 +18,7 @@ $context = [];
 
 $controller = null;
 
-$pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
+//$pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
 
 $loader = new \Twig\Loader\FilesystemLoader('../views');
 $twig = new \Twig\Environment($loader, [

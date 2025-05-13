@@ -6,8 +6,8 @@ class BaseSpaceTwigController extends TwigBaseController{
         $context = parent::getContext();
 
         $query = $this->pdo->query("SELECT DISTINCT period FROM theninth_wave ORDER BY 1");
-        $types = $query->fetchAll();
-        $context['types']=$types;
+        $periods = $query->fetchAll();
+        $context['periods']=$periods;
         return $context;
     }
 }

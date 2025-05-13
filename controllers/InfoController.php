@@ -1,6 +1,6 @@
 <?php
 
-class InfoController extends TwigBaseController {
+/class InfoController extends TwigBaseController {
     public $template = "info.twig"; // шаблон для описания
     public $books = [];       // даже если не используется
     public $tabs = [];
@@ -23,5 +23,5 @@ class InfoController extends TwigBaseController {
         }
 
         return $context;
-    }
+    }*/
 }

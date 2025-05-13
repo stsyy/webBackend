@@ -9,10 +9,18 @@ class MainController extends BaseSpaceTwigController {
        public function getContext(): array
        {
            $context = parent::getContext();
+
+           if (isset($_GET['period'])) {
+            $query=$this->pdo->prepare("SELECT * FROM theninth_wave WHERE period = :period");
+            $query->bindValue("period", $_GET['period']);
+            $query->execute();
+           } else {
+            $query=$this->pdo->query("SELECT * FROM theninth_wave WHERE period");
+           }
            
            // подготавливаем запрос SELECT * FROM space_objects
            // вообще звездочку не рекомендуется использовать, но на первый раз пойдет
-           $query = $this->pdo->query("SELECT * FROM theninth_wave");
+          // $query = $this->pdo->query("SELECT * FROM theninth_wave");
            
            // стягиваем данные через fetchAll() и сохраняем результат в контекст
            $context['theninth_wave'] = $query->fetchAll();
