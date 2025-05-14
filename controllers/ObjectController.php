@@ -2,43 +2,43 @@
 require_once "BaseSpaceTwigController.php";
 
 class ObjectController extends BaseSpaceTwigController {
-    public $template = "__object.twig"; // базовый шаблон
+    public $template = "__object.twig";
+    public $books = [];
+    public $tabs = [];
+    public $tab1_url = "";
+    public $tab2_url = "";
+    public $tab1_text = "";
+    public $tab2_text = "";
 
     public function getContext(): array {
         $context = parent::getContext();
 
-        $id = $this->params[1]; // вытаскиваем id из URL
+        $id = $this->params['id'] ?? null;
+
+        if (!$id) {
+            $context['painting'] = [
+                'title' => 'Картина не найдена',
+                'image' => '',
+                'description' => ''
+            ];
+            return $context;
+        }
 
         // Загружаем данные из БД
         $query = $this->pdo->prepare("SELECT * FROM theninth_wave WHERE id = :id");
         $query->execute(["id" => $id]);
         $painting = $query->fetch();
 
-        if ($painting) {
-            $context['painting'] = $painting;
-        } else {
-            $context['painting'] = [
-                'title' => 'Картина не найдена',
-                'image' => '',
-                'description' => ''
-            ];
-        }
+        $context['painting'] = $painting ?: [
+            'title' => 'Картина не найдена',
+            'image' => '',
+            'description' => ''
+        ];
 
-        // Смотрим, какой режим отображения выбран
-        $show = $_GET['show'] ?? 'default';
-
-        switch ($show) {
-            case 'image':
-                $this->template = "image.twig";
-                break;
-            case 'info':
-                $this->template = "info.twig";
-                break;
-            default:
-                $this->template = "__object.twig"; // шаблон по умолчанию
-                break;
-        }
+        // Передаём параметр "show" в шаблон
+        $context['show'] = $_GET['show'] ?? null;
 
         return $context;
     }
+
 }

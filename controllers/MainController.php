@@ -15,7 +15,7 @@ class MainController extends BaseSpaceTwigController {
             $query->bindValue("period", $_GET['period']);
             $query->execute();
            } else {
-            $query=$this->pdo->query("SELECT * FROM theninth_wave WHERE period");
+            $query=$this->pdo->query("SELECT * FROM theninth_wave");
            }
            
            // подготавливаем запрос SELECT * FROM space_objects

@@ -2,8 +2,24 @@
 
 {% block layout_content %}
 <div class="container mt-4">
-    <h1>{{ painting.title }}</h1>
-    <img src="{{ painting.image }}" class="img-fluid" alt="{{ painting.title }}">
-    <p>{{ painting.description }}</p>
+    <h1 class="mb-4">{{ painting.title }}</h1>
+
+    {% if show == 'image' %}
+        <img src="{{ painting.image }}" alt="{{ painting.title }}" class="img-fluid mb-4">
+    
+    {% elseif show == 'info' %}
+        <p>{{ painting.description }}</p>
+    
+    {% else %}
+        <!-- Общая информация -->
+        <img src="{{ painting.image }}" alt="{{ painting.title }}" class="img-fluid mb-4">
+        <p class="mt-3">{{ painting.description }}</p>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="/theninth_wave/{{ painting.id }}?show=image" class="btn btn-outline-primary">Картинка</a>
+        <a href="/theninth_wave/{{ painting.id }}?show=info" class="btn btn-outline-secondary">Описание</a>
+        <a href="/theninth_wave/{{ painting.id }}" class="btn btn-outline-dark">Общее</a>
+    </div>
 </div>
 {% endblock %}

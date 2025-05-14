@@ -40,7 +40,7 @@ class Router {
         $url = $_SERVER["REQUEST_URI"];
        
     $path = parse_url($url, PHP_URL_PATH); // вытаскиваем адрес
-    echo $path; // выводим
+   // echo $path; // выводим
 
    // echo "<pre>"; // чтобы красивее выводил
    // print_r($_GET); // выведем содержимое $_GET

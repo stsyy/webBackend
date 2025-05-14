@@ -1,0 +1,44 @@
+{% extends "_layout.twig" %}
+
+{% block layout_content %}
+    <h1>Поиск</h1>
+
+    <form action="/search" method="get" class="row gx-3 gy-2 align-items-center">
+        <div class="col-sm-6">
+            <label for="period" class="form-label">Период:</label>
+            <select class="form-select" id="period" name="period">
+                <option value="">Все</option>
+                <option value="Ранний период" {% if selectedPeriod == 'Ранний период' %}selected{% endif %}>Ранний период</option>
+                <option value="Поздний период" {% if selectedPeriod == 'Поздний период' %}selected{% endif %}>Поздний период</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <label for="title" class="form-label">Название:</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ searchedTitle }}">
+        </div>
+        <div class="col-12">
+            <label for="description" class="form-label">Описание:</label>
+            <input type="text" class="form-control" id="description" name="description" value="{{ searchedDescription }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </div>
+    </form>
+
+    {% if searchResults %}
+        <h2 class="mt-4">Результаты поиска:</h2>
+        {% if searchResults|length > 0 %}
+            <ul class="list-group">
+                {% for painting in searchResults %}
+                    <li class="list-group-item">
+                        <a href="/theninth_wave/{{ painting.id }}">{{ painting.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="mt-3">По запросу{% if searchedTitle %} с названием "{{ searchedTitle }}"{% endif %}{% if selectedPeriod and selectedPeriod != '' %} в периоде "{{ selectedPeriod }}"{% endif %}{% if searchedDescription %} с описанием "{{ searchedDescription }}"{% endif %} ничего не найдено.</p>
+        {% endif %}
+    {% elseif searchedTitle or selectedPeriod or searchedDescription %}
+        <p class="mt-3">Пожалуйста, введите критерии поиска.</p>
+    {% endif %}
+{% endblock %}

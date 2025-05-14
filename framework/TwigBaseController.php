@@ -20,13 +20,13 @@ class TwigBaseController extends BaseController {
 
     public function getContext(): array {
         $context = parent::getContext();
-        $context['books'] = $this->books;
-        $context['tabs'] = $this->tabs;
-        $context['tab1_url'] = $this->tab1_url;
-        $context['tab2_url'] = $this->tab2_url;
-        $context['tab1_text'] = $this->tab1_text;
-        $context['tab2_text'] = $this->tab2_text;
-        $context = array_merge($context, $this->image_data ?? []);
+      //  $context['books'] = $this->books;
+      //  $context['tabs'] = $this->tabs;
+      //  $context['tab1_url'] = $this->tab1_url;
+       // $context['tab2_url'] = $this->tab2_url;
+      //  $context['tab1_text'] = $this->tab1_text;
+       // $context['tab2_text'] = $this->tab2_text;
+       // $context = array_merge($context, $this->image_data ?? []);
         return $context;
     }
 

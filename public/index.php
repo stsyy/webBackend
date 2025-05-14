@@ -5,8 +5,9 @@ require_once '../framework/autoload.php';
 
 require_once "../controllers/MainController.php";
 require_once "../controllers/ObjectController.php";
-require_once "../controllers/ImageController.php";
-require_once "../controllers/InfoController.php";
+require_once "../controllers/SearchController.php";
+//require_once "../controllers/ImageController.php";
+//require_once "../controllers/InfoController.php";
 require_once "../controllers/BayController.php";
 require_once "../controllers/BayImageController.php";
 require_once "../controllers/BayInfoController.php";
@@ -75,26 +76,10 @@ $pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
 
 $router = new Router($twig, $pdo);
 $router->add("/", MainController::class);
-$router->add("/theninth_wave/(?P<id>\d+)/image", ImageController::class);
-$router->add("/theninth_wave/(?P<id>\d+)/info", InfoController::class);
+$router->add("/theninth_wave/(?P<id>\d+)/image", ObjectController::class);
+$router->add("/theninth_wave/(?P<id>\d+)/info", ObjectController::class);
 $router->add("/theninth_wave/(?P<id>\d+)", ObjectController::class);
+$router->add("/search", SearchController::class);
 $router->get_or_default(Controller404::class);
-
-/*if ($url == "/") {
-    $controller = new MainController($twig);
-} */
-
-// if ($template) {
-//     echo $twig->render($template, array_merge([
-//         "title" => $title,
-//         "current_url" => $url,
-//         'books' => $books
-//     ], $tabs, $image_data));
-// }
-
-/*if ($controller) {
-    $controller->setPDO($pdo);
-    $controller->get();
-}*/
 
 ?>
