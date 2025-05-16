@@ -30,7 +30,10 @@
                     </li>
                 {% endfor %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/search">Поиск</a>
+                    <a class="nav-link" href="/search">Поиск</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add">Добавить</a>
                 </li>
             </ul>
         </div>
@@ -39,7 +42,7 @@
 
 <div class="container mt-4">
     {% block layout_content %}
-        пусто
+        {% block content %}{% endblock %}
     {% endblock %}
 </div>
 

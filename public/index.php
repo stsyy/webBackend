@@ -15,6 +15,7 @@ require_once "../controllers/WaveInfoController.php";
 require_once "../controllers/WaveController.php";
 require_once "../controllers/WaveImageController.php";
 require_once "../controllers/Controller404.php";
+require_once "../controllers/AddController.php"; 
 $context = []; 
 
 $controller = null;
@@ -80,6 +81,9 @@ $router->add("/theninth_wave/(?P<id>\d+)/image", ObjectController::class);
 $router->add("/theninth_wave/(?P<id>\d+)/info", ObjectController::class);
 $router->add("/theninth_wave/(?P<id>\d+)", ObjectController::class);
 $router->add("/search", SearchController::class);
+//$router->add("/add", AddController::class);
+$router->get("/add", AddController::class); // Для отображения формы
+$router->post("/add", AddController::class); // Для обработки отправки формы
 $router->get_or_default(Controller404::class);
 
 ?>
