@@ -6,6 +6,7 @@ require_once '../framework/autoload.php';
 require_once "../controllers/MainController.php";
 require_once "../controllers/ObjectController.php";
 require_once "../controllers/SearchController.php";
+require_once "../controllers/AddObjectTypeController.php";
 //require_once "../controllers/ImageController.php";
 //require_once "../controllers/InfoController.php";
 require_once "../controllers/BayController.php";
@@ -15,7 +16,7 @@ require_once "../controllers/WaveInfoController.php";
 require_once "../controllers/WaveController.php";
 require_once "../controllers/WaveImageController.php";
 require_once "../controllers/Controller404.php";
-require_once "../controllers/AddController.php"; 
+require_once "../controllers/AddController.php"; // Оставьте только эту строку
 $context = []; 
 
 $controller = null;
@@ -38,8 +39,6 @@ $tab1_url = "";
 $tab2_url = "";
 $tab1_text = "";
 $tab2_text = "";
-
-//$controller = new Controller404($twig);
 
 $books = [
     [
@@ -84,6 +83,8 @@ $router->add("/search", SearchController::class);
 //$router->add("/add", AddController::class);
 $router->get("/add", AddController::class); // Для отображения формы
 $router->post("/add", AddController::class); // Для обработки отправки формы
+$router->get("/add_object_type", AddObjectTypeController::class); 
+$router->post("/add_object_type", AddObjectTypeController::class); 
 $router->get_or_default(Controller404::class);
 
 ?>

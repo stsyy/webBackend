@@ -9,6 +9,8 @@ class SearchController extends BaseSpaceTwigController
     {
         $context = parent::getContext();
 
+        $context['current_page'] = 'search';
+
         $period = isset($_GET['period']) ? $_GET['period'] : '';
         $title = isset($_GET['title']) ? $_GET['title'] : '';
         $description = isset($_GET['description']) ? $_GET['description'] : '';

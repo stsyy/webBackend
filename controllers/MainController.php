@@ -1,36 +1,56 @@
 <?php
-//require_once "TwigBaseController.php"; // импортим TwigBaseController
 require_once "BaseSpaceTwigController.php";
+
 class MainController extends BaseSpaceTwigController {
     public $template = "main.twig";
     public $title = "Главная";
 
-       // добавим метод getContext()
-       public function getContext(): array
-       {
-           $context = parent::getContext();
+    public function getContext(): array
+    {
+        $context = parent::getContext();
 
-           if (isset($_GET['period'])) {
-            $query=$this->pdo->prepare("SELECT * FROM theninth_wave WHERE period = :period");
-            $query->bindValue("period", $_GET['period']);
-            $query->execute();
-           } else {
-            $query=$this->pdo->query("SELECT * FROM theninth_wave");
-           }
-           
-           // подготавливаем запрос SELECT * FROM space_objects
-           // вообще звездочку не рекомендуется использовать, но на первый раз пойдет
-          // $query = $this->pdo->query("SELECT * FROM theninth_wave");
-           
-           // стягиваем данные через fetchAll() и сохраняем результат в контекст
-           $context['theninth_wave'] = $query->fetchAll();
-   
-           return $context;
-       }
+        $period = $_GET['period'] ?? null;
+        $type_id = $_GET['type'] ?? null;
 
+        $sql = "SELECT * FROM theninth_wave";
+        $conditions = [];
+        $params = [];
+
+        if ($period) {
+            $conditions[] = "period = :period";
+            $params['period'] = $period;
+            $context['current_period'] = $period;
+        }
+
+        if ($type_id) {
+            $conditions[] = "object_type_id = :type_id";
+            $params['type_id'] = $type_id;
+            $context['current_type'] = $type_id;
+        }
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute($params);
+        $context['theninth_wave'] = $query->fetchAll();
+
+        // Загружаем список типов объектов для меню
+        $type_query = $this->pdo->query("SELECT * FROM object_types");
+        $context['object_types'] = $type_query->fetchAll();
+
+        // Загружаем список периодов для меню (если используется)
+        $period_query = $this->pdo->query("SELECT DISTINCT period FROM theninth_wave");
+        $context['periods'] = $period_query->fetchAll();
+
+        return $context;
+    }
+
+    // Оставим это, если используешь в шаблоне (но не обязательно)
     public $books = [
         [
-            'name' => 'Девятый вал','base_url' => '/ninthval',
+            'name' => 'Девятый вал', 'base_url' => '/ninthval',
             'tabs' => [
                 ['url' => '/ninthval/image', 'text' => 'Картинка'],
                 ['url' => '/ninthval/info', 'text' => 'Описание']
@@ -44,10 +64,4 @@ class MainController extends BaseSpaceTwigController {
             ]
         ]
     ];
-    public $tabs = [];
-    public $image_data = [];
-    public $tab1_url = "";
-    public $tab2_url = "";
-    public $tab1_text = "";
-    public $tab2_text = "";
 }

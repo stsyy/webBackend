@@ -1,0 +1,28 @@
+{% extends "_layout.twig" %}
+
+{% block layout_content %}
+    <h1>Добавить новый тип объекта</h1>
+    <hr>
+
+    {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form action="/add_object_type" method="POST" enctype="multipart/form-data" class="row g-3">
+        <div class="col-md-6">
+            <label for="name" class="form-label">Название типа объекта</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="col-md-6">
+            <label for="image" class="form-label">Изображение (необязательно)</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+        <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Добавить тип объекта</button>
+        </div>
+    </form>
+{% endblock %}

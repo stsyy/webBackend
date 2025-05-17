@@ -9,6 +9,14 @@ class AddController extends BaseSpaceTwigController
     public function getContext(): array
     {
         $context = parent::getContext();
+
+        $context['current_page'] = 'add';
+
+        $sql = "SELECT id, name FROM object_types";
+        $query = $this->pdo->prepare($sql);
+        $query->execute();
+        $context['object_types'] = $query->fetchAll();
+
         return $context;
     }
 
@@ -28,7 +36,7 @@ class AddController extends BaseSpaceTwigController
         $description = $_POST['description'] ?? '';
         $period = $_POST['period'] ?? '';
         $info = $_POST['info'] ?? ''; // Вы также получаете полное описание
-    
+        $object_type_id = $_POST['object_type_id'] ?? null;
         // Инициализируем переменную для URL изображения
         $image_url = '';
     
@@ -51,9 +59,9 @@ class AddController extends BaseSpaceTwigController
     
         // создаем текст запроса
         $sql = <<<EOL
-    INSERT INTO theninth_wave(title, image, description, period)
-    VALUES(:title, :image, :description, :period)
-    EOL;
+INSERT INTO theninth_wave(title, image, description, period, object_type_id)
+VALUES(:title, :image, :description, :period, :object_type_id)
+EOL;
     
         // подготавливаем запрос к БД
         $query = $this->pdo->prepare($sql);
@@ -62,6 +70,8 @@ class AddController extends BaseSpaceTwigController
         $query->bindValue("image", $image_url); // Привязываем URL изображения
         $query->bindValue("description", $description);
         $query->bindValue("period", $period);
+        $query->bindValue("object_type_id", $object_type_id, PDO::PARAM_INT); // Явно указываем тип параметра
+
     
         // выполняем запрос
         if ($query->execute()) {

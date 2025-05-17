@@ -1,16 +1,18 @@
 {% extends "_layout.twig" %}
 
 {% block layout_content %}
-    <h1>Добавление картины</h1>
+    <h1>Добавление объекта</h1>
     <hr>
 
     {% if message %}
-        <div class="alert alert-info">
-            {{ message }}
-        </div>
+        <div class="alert alert-info">{{ message }}</div>
     {% endif %}
 
-    <form action="" enctype="multipart/form-data" method="POST" class="row g-3" enctype="multipart/form-data">
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form action="/add" method="POST" class="row g-3" enctype="multipart/form-data">
         <div class="col-md-4">
             <label for="title" class="form-label">Название</label>
             <input type="text" class="form-control" id="title" name="title">
@@ -20,21 +22,26 @@
             <input type="text" class="form-control" id="description" name="description">
         </div>
         <div class="col-md-4">
-            <label for="period" class="form-label">Тип</label>
-            <select class="form-select" id="period" name="period">
-                <option value="Ранний период">Ранний период</option>
-                <option value="Поздний период">Поздний период</option>
+            <label for="object_type_id" class="form-label">Тип объекта</label>
+            <select class="form-select" id="object_type_id" name="object_type_id" required>
+                <option value="">Выберите тип объекта</option>
+                {% for type in object_types %}
+                    <option value="{{ type.id }}">{{ type.name }}</option>
+                {% endfor %}
             </select>
         </div>
-        <div class="col-12">
-            <label for="image" class="form-label">Изображение</label>
-            <input type="file" class="form-control" id="image" name="image">
+        <div class="col-md-4">
+            <label for="period" class="form-label">Период</label>
+            <input type="text" class="form-control" id="period" name="period">
         </div>
         <div class="col-12">
             <label for="info" class="form-label">Полное описание</label>
             <textarea class="form-control" id="info" name="info" placeholder="Полное описание..." rows="5"></textarea>
         </div>
-
+        <div class="col-12">
+            <label for="image" class="form-label">Изображение</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
         <div class="col-12 text-end">
             <button type="submit" class="btn btn-primary">Добавить</button>
         </div>
