@@ -14,10 +14,10 @@ class TwigBaseController extends BaseController {
 
     public \PDO $pdo;
 
-    public function __construct(\Twig\Environment $twig, \PDO $pdo)
+    public function __construct(\PDO $pdo, \Twig\Environment $twig)
     {
-        $this->twig = $twig;
         $this->pdo = $pdo;
+        $this->twig = $twig;
     }
 
     public function getContext(): array

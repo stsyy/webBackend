@@ -63,7 +63,7 @@ class Router {
             }
         }
     
-        $controllerInstance = new $controllerToUse($this->twig, $this->pdo);
+        $controllerInstance = new $controllerToUse($this->pdo, $this->twig);
         $controllerInstance->setParams($matches);
     
         if (method_exists($controllerInstance, $methodToCall)) {
