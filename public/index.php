@@ -17,6 +17,7 @@ require_once "../controllers/WaveController.php";
 require_once "../controllers/WaveImageController.php";
 require_once "../controllers/Controller404.php";
 require_once "../controllers/AddController.php"; 
+require_once "../controllers/UpdateController.php"; 
 require_once "../controllers/DeleteController.php"; // Оставьте только эту строку
 $context = []; 
 
@@ -86,7 +87,15 @@ $router->get("/add", AddController::class); // Для отображения ф�
 $router->post("/add", AddController::class); // Для обработки отправки формы
 $router->get("/add_object_type", AddObjectTypeController::class); 
 $router->post("/add_object_type", AddObjectTypeController::class); 
-$router->post("/theninth_wave/delete", DeleteController::class); // Или DeletePaintingController::class, если вы не переименовывали класс
+$router->post("/theninth_wave/delete", DeleteController::class);
+
+// Для списка объектов
+$router->get("/edit", UpdateController::class);
+// Для формы редактирования
+$router->get("/edit/(?P<id>\d+)", UpdateController::class);
+// Для обработки POST-запроса
+$router->post("/edit/(?P<id>\d+)", UpdateController::class);
+
 $router->get_or_default(Controller404::class);
 
 ?>

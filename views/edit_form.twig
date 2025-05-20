@@ -1,0 +1,54 @@
+{% extends "_layout.twig" %}
+
+{% block layout_content %}
+    <h1>Редактирование объекта</h1>
+    <hr>
+
+    {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if object %}
+        <form action="/edit/{{ object.id }}" method="POST" enctype="multipart/form-data" class="row g-3">
+            <div class="col-md-4">
+                <label for="title" class="form-label">Название</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ object.title }}">
+            </div>
+            <div class="col-md-4">
+                <label for="description" class="form-label">Краткое описание</label>
+                <input type="text" class="form-control" id="description" name="description" value="{{ object.description }}">
+            </div>
+            <div class="col-md-4">
+                <label for="object_type_id" class="form-label">Тип объекта</label>
+                <select class="form-select" id="object_type_id" name="object_type_id" required>
+                    <option value="">Выберите тип объекта</option>
+                    {% for type in object_types %}
+                        <option value="{{ type.id }}" {% if object.object_type_id == type.id %}selected{% endif %}>{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12">
+                <label for="info" class="form-label">Полное описание</label>
+                <textarea class="form-control" id="info" name="info" rows="5">{{ object.info }}</textarea>
+            </div>
+            <div class="col-12">
+                <label for="image" class="form-label">Изображение</label>
+                <input type="file" class="form-control" id="image" name="image">
+                {% if object.image %}
+                    <p class="mt-2">Текущее изображение: <img src="{{ object.image }}" alt="{{ object.title }}" style="max-width: 200px;"></p>
+                    <input type="hidden" name="current_image" value="{{ object.image }}">
+                {% endif %}
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                <a href="/edit" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    {% else %}
+        <p>Объект не найден.</p>
+    {% endif %}
+{% endblock %}

@@ -38,6 +38,9 @@
                 <li class="nav-item">
                     <a class="nav-link {% if current_page == 'add_type' %}active{% endif %}" href="/add_object_type">Добавить тип</a>
                 </li>
+               <li class="nav-item">
+                 <a class="nav-link {% if current_page == 'edit_list' %}active{% endif %}" href="/edit">Изменить объект</a>
+               </li>
                 {% for type in object_types %}
                     <li class="nav-item">
                         <a class="nav-link {% if active_type == type.id %}active{% endif %}" href="/?type={{ type.id }}">{{ type.name }}</a>

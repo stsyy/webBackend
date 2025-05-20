@@ -4,6 +4,7 @@ abstract class BaseController {
 
     public PDO $pdo; // добавил поле
     public array $params;
+    protected \Twig\Environment $twig;
 
       public function __construct(\PDO $pdo, \Twig\Environment $twig) { // Измените порядок, если контроллеры зависят от Twig
         $this->pdo = $pdo;

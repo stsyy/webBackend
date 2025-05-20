@@ -1,42 +1,37 @@
 <?php
 
-// сначала создадим класс под один маршрут
 class Route {
-    public string $route_regexp; // тут получается шаблона url
-    public $controller; // а это класс контроллера
-    public string $method; // добавляем поле для метода запроса
+    public string $route_regexp;
+    public $controller;
+    public string $method;
 
-    // ну и просто конструктор
     public function __construct($route_regexp, $controller, $method = 'GET')
     {
         $this->route_regexp = $route_regexp;
         $this->controller = $controller;
-        $this->method = strtoupper($method); // приводим метод к верхнему регистру для единообразия
+        $this->method = strtoupper($method);
     }
 }
+
 class Router {
     /**
      * @var Route[]
      */
-    protected $routes = []; // создаем поле -- список под маршруты и привязанные к ним контроллеры
+    protected $routes = [];
 
-    protected $twig; // переменные под twig и pdo
+    protected $twig;
     protected $pdo;
 
-    // конструктор
     public function __construct($twig, $pdo)
     {
         $this->twig = $twig;
         $this->pdo = $pdo;
     }
 
-    // функция с помощью которой добавляем маршрут
     public function add($route_regexp, $controller, $method = 'GET') {
-        // по сути просто пихает маршрут с привязанным контроллером в $routes
         $this->routes[] = new Route("#^$route_regexp$#", $controller, $method);
     }
 
-    // shortcuts for adding GET and POST routes
     public function get($route_regexp, $controller) {
         $this->add($route_regexp, $controller, 'GET');
     }
@@ -45,8 +40,6 @@ class Router {
         $this->add($route_regexp, $controller, 'POST');
     }
 
-    // функция которая должна по url и методу найти маршрут и вызывать соответствующий метод контроллера
-    // если маршрут не найден, то будет использоваться контроллер по умолчанию
     public function get_or_default($default_controller) {
         $url = $_SERVER["REQUEST_URI"];
         $method = strtoupper($_SERVER['REQUEST_METHOD']);
@@ -54,22 +47,30 @@ class Router {
         $matches = [];
         $controllerToUse = $default_controller;
         $methodToCall = 'get';
-    
+        $params = [];
+
         foreach ($this->routes as $route) {
             if ($route->method === $method && preg_match($route->route_regexp, $path, $matches)) {
+                // Извлекаем только именованные параметры
+                foreach ($matches as $key => $value) {
+                    if (!is_int($key)) {
+                        $params[$key] = $value;
+                    }
+                }
+
                 $controllerToUse = $route->controller;
                 $methodToCall = strtolower($method);
                 break;
             }
         }
-    
+
         $controllerInstance = new $controllerToUse($this->pdo, $this->twig);
-        $controllerInstance->setParams($matches);
-    
+        $controllerInstance->setParams($params);
+
         if (method_exists($controllerInstance, $methodToCall)) {
-            return $controllerInstance->$methodToCall([]); // Передаем пустой массив контекста
+            return $controllerInstance->$methodToCall([]);
         } else {
-            return $controllerInstance->get([]); // Передаем пустой массив контекста и для запасного варианта
+            return $controllerInstance->get([]);
         }
     }
 }

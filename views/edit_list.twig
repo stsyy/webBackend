@@ -1,0 +1,19 @@
+{% extends "_layout.twig" %}
+
+{% block layout_content %}
+    <h1>Редактирование объектов</h1>
+    <hr>
+
+    {% if objects is empty %}
+        <p>Нет доступных объектов для редактирования.</p>
+    {% else %}
+        <ul class="list-group">
+            {% for object in objects %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ object.title }}
+                    <a href="/edit/{{ object.id }}" class="btn btn-primary btn-sm">Редактировать</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

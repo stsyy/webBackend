@@ -15,7 +15,7 @@
     <form action="/add" method="POST" class="row g-3" enctype="multipart/form-data">
         <div class="col-md-4">
             <label for="title" class="form-label">Название</label>
-            <input type="text" class="form-control" id="title" name="title">
+            <input type="text" class="form-control" id="title" name="title" value="{{object.title}}">
         </div>
         <div class="col-md-4">
             <label for="description" class="form-label">Краткое описание</label>
@@ -23,6 +23,7 @@
         </div>
         <div class="col-md-4">
             <label for="object_type_id" class="form-label">Тип объекта</label>
+            
             <select class="form-select" id="object_type_id" name="object_type_id" required>
                 <option value="">Выберите тип объекта</option>
                 {% for type in object_types %}
