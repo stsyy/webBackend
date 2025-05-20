@@ -18,6 +18,7 @@ require_once "../controllers/WaveImageController.php";
 require_once "../controllers/Controller404.php";
 require_once "../controllers/AddController.php"; 
 require_once "../controllers/UpdateController.php"; 
+require_once "../middlewares/LoginRequiredMiddleware.php";
 require_once "../controllers/DeleteController.php"; // Оставьте только эту строку
 $context = []; 
 
@@ -83,18 +84,26 @@ $router->add("/theninth_wave/(?P<id>\d+)/info", ObjectController::class);
 $router->add("/theninth_wave/(?P<id>\d+)", ObjectController::class);
 $router->add("/search", SearchController::class);
 //$router->add("/add", AddController::class);
-$router->get("/add", AddController::class); // Для отображения формы
-$router->post("/add", AddController::class); // Для обработки отправки формы
-$router->get("/add_object_type", AddObjectTypeController::class); 
-$router->post("/add_object_type", AddObjectTypeController::class); 
-$router->post("/theninth_wave/delete", DeleteController::class);
+$router->get("/add", AddController::class) 
+       ->middleware(new LoginRequiredMiddleware());
+$router->post("/add", AddController::class) 
+->middleware(new LoginRequiredMiddleware());
+$router->get("/add_object_type", AddObjectTypeController::class) 
+->middleware(new LoginRequiredMiddleware());
+$router->post("/add_object_type", AddObjectTypeController::class) 
+->middleware(new LoginRequiredMiddleware());
+$router->post("/theninth_wave/delete", DeleteController::class)
+->middleware(new LoginRequiredMiddleware());
 
 // Для списка объектов
-$router->get("/edit", UpdateController::class);
+$router->get("/edit", UpdateController::class)
+->middleware(new LoginRequiredMiddleware());
 // Для формы редактирования
-$router->get("/edit/(?P<id>\d+)", UpdateController::class);
+$router->get("/edit/(?P<id>\d+)", UpdateController::class)
+->middleware(new LoginRequiredMiddleware());
 // Для обработки POST-запроса
-$router->post("/edit/(?P<id>\d+)", UpdateController::class);
+$router->post("/edit/(?P<id>\d+)", UpdateController::class)
+->middleware(new LoginRequiredMiddleware());
 
 $router->get_or_default(Controller404::class);
 
