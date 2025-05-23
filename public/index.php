@@ -1,4 +1,6 @@
 <?php
+
+//session_start();
 require_once '../vendor/autoload.php';
 
 require_once '../framework/autoload.php';
@@ -7,8 +9,6 @@ require_once "../controllers/MainController.php";
 require_once "../controllers/ObjectController.php";
 require_once "../controllers/SearchController.php";
 require_once "../controllers/AddObjectTypeController.php";
-//require_once "../controllers/ImageController.php";
-//require_once "../controllers/InfoController.php";
 require_once "../controllers/BayController.php";
 require_once "../controllers/BayImageController.php";
 require_once "../controllers/BayInfoController.php";
@@ -19,7 +19,12 @@ require_once "../controllers/Controller404.php";
 require_once "../controllers/AddController.php"; 
 require_once "../controllers/UpdateController.php"; 
 require_once "../middlewares/LoginRequiredMiddleware.php";
-require_once "../controllers/DeleteController.php"; // Оставьте только эту строку
+require_once "../controllers/DeleteController.php"; 
+require_once "../controllers/SetWelcomeController.php"; 
+
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
 $context = []; 
 
 $controller = null;
@@ -104,6 +109,8 @@ $router->get("/edit/(?P<id>\d+)", UpdateController::class)
 // Для обработки POST-запроса
 $router->post("/edit/(?P<id>\d+)", UpdateController::class)
 ->middleware(new LoginRequiredMiddleware());
+
+$router->add("/set_welcome", SetWelcomeController::class);
 
 $router->get_or_default(Controller404::class);
 

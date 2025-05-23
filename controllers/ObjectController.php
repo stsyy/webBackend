@@ -37,7 +37,7 @@ class ObjectController extends BaseSpaceTwigController {
 
         // Передаём параметр "show" в шаблон
         $context['show'] = $_GET['show'] ?? null;
-
+      $context["my_session_message"] = isset($_SESSION['welcome_message']) ? $_SESSION['welcome_message'] : "";
         return $context;
     }
 

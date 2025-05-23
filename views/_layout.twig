@@ -21,41 +21,61 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+
                 <li class="nav-item">
                     <a class="nav-link {% if current_page == 'home' %}active{% endif %}" href="/">Главная</a>
                 </li>
+
                 {% for period in periods %}
                     <li class="nav-item">
                         <a class="nav-link {% if active_period == period.period %}active{% endif %}" href="/?period={{ period.period }}">{{ period.period|title }}</a>
                     </li>
                 {% endfor %}
+
                 <li class="nav-item">
                     <a class="nav-link {% if current_page == 'search' %}active{% endif %}" href="/search">Поиск</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {% if current_page == 'add' %}active{% endif %}" href="/add">Добавить объект</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {% if current_page == 'add_type' %}active{% endif %}" href="/add_object_type">Добавить тип</a>
                 </li>
-               <li class="nav-item">
-                 <a class="nav-link {% if current_page == 'edit_list' %}active{% endif %}" href="/edit">Изменить объект</a>
-               </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if current_page == 'edit_list' %}active{% endif %}" href="/edit">Изменить объект</a>
+                </li>
+
                 {% for type in object_types %}
                     <li class="nav-item">
                         <a class="nav-link {% if active_type == type.id %}active{% endif %}" href="/?type={{ type.id }}">{{ type.name }}</a>
                     </li>
                 {% endfor %}
+
+                <li class="nav-item">
+                    <form action="/logout" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger">Выйти</button>
+                    </form>
+                </li>
             </ul>
+
+            {# Форма отправки welcome-сообщения #}
+            <form action="/set_welcome" method="get" class="d-flex ms-3">
+                <input type="text" name="message" class="form-control me-2" placeholder="Сообщение">
+                <button type="submit" class="btn btn-primary">OK</button>
+            </form>
         </div>
     </div>
 </nav>
 
 <div class="container mt-4">
-    {% block layout_content %}
-        {% block content %}{% endblock %}
-    {% endblock %}
+    {% block layout_content %}{% endblock %}
 </div>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

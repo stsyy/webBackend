@@ -7,6 +7,8 @@ class MainController extends BaseSpaceTwigController {
 
     public function getContext(): array
     {
+        error_log("MainController::getContext вызван");
+
         $context = parent::getContext();
 
         $period = $_GET['period'] ?? null;
@@ -46,6 +48,14 @@ class MainController extends BaseSpaceTwigController {
 
         return $context;
     }
+
+    public function get(array $context): void {
+    $this->twig->display("main.twig", $this->getContext());
+}
+
+public function post(array $context): void {
+    // сюда твой код для POST или пусто, если не нужен
+}
 
     // Оставим это, если используешь в шаблоне (но не обязательно)
     public $books = [
