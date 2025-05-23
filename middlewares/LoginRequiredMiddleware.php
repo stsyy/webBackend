@@ -2,7 +2,14 @@
 
 class LoginRequiredMiddleware extends BaseMiddleware
 {
-    public function apply(BaseController $controller, array $context): void
+     public function handle()
+    {
+        if (!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] !== true) {
+            header('Location: /login');
+            exit;
+        }
+    }
+   /* public function apply(BaseController $controller, array $context): void
     {
         // Если уже авторизован — пропускаем
         if (isset($_SESSION['user_id'])) {
@@ -37,7 +44,7 @@ class LoginRequiredMiddleware extends BaseMiddleware
                 <button type="submit">Войти</button>
               </form>';
         exit;
-    }
+    }*/
 }
 
 /*class LoginRequiredMiddleware extends BaseMiddleware {

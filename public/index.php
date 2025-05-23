@@ -21,6 +21,8 @@ require_once "../controllers/UpdateController.php";
 require_once "../middlewares/LoginRequiredMiddleware.php";
 require_once "../controllers/DeleteController.php"; 
 require_once "../controllers/SetWelcomeController.php"; 
+require_once "../controllers/LoginController.php"; // Подключаем LoginController
+require_once "../controllers/LogoutController.php"; // Подключаем LogoutController
 
 //error_reporting(E_ALL);
 //ini_set('display_errors', '1');
@@ -83,6 +85,12 @@ function setTabs($tab1_url, $tab2_url, $tab1_text, $tab2_text) {
 $pdo = new PDO("mysql:host=localhost;dbname=pictures;charset=utf8", "root", "");
 
 $router = new Router($twig, $pdo);
+
+$router->get("/login", LoginController::class);
+$router->post("/login", LoginController::class);
+$router->get("/logout", LogoutController::class);
+
+
 $router->add("/", MainController::class);
 $router->add("/theninth_wave/(?P<id>\d+)/image", ObjectController::class);
 $router->add("/theninth_wave/(?P<id>\d+)/info", ObjectController::class);
