@@ -37,44 +37,45 @@ abstract class BaseController {
         ];
     }
 
-    public function process_response(): void {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_set_cookie_params(60 * 60 * 10);
-            session_start();
+public function process_response(): void {
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_set_cookie_params(60 * 60 * 10);
+        session_start();
+    }
+
+    // Очистим старый формат истории, если он есть
+    if (isset($_SESSION['page_history']) && is_array($_SESSION['page_history'])) {
+        if (!empty($_SESSION['page_history']) && is_string($_SESSION['page_history'][0])) {
+            $_SESSION['page_history'] = []; // сбрасываем в случае старого формата
+        }
+    }
+
+    $uri = $_SERVER['REQUEST_URI'];
+
+    // Игнорируем статику
+    if (!preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg)$/i', $uri)) {
+        if (!isset($_SESSION['page_history'])) {
+            $_SESSION['page_history'] = [];
         }
 
-        // Очистим старый формат истории, если он есть
-        if (isset($_SESSION['page_history']) && is_array($_SESSION['page_history'])) {
-            if (!empty($_SESSION['page_history']) && is_string($_SESSION['page_history'][0])) {
-                $_SESSION['page_history'] = []; // сбрасываем в случае старого формата
-            }
-        }
+        $page_title = $this->resolveTitleFromURI($uri);
+        $new_entry = ['url' => $uri, 'title' => $page_title];
 
-        $uri = $_SERVER['REQUEST_URI'];
-
-        if (!preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg)$/i', $uri)) {
-            if (!isset($_SESSION['page_history'])) {
-                $_SESSION['page_history'] = [];
-            }
-
-            $page_title = $this->resolveTitleFromURI($uri);
-            $new_entry = ['url' => $uri, 'title' => $page_title];
-
-           if (empty($_SESSION['page_history']) || !in_array(['url' => $uri, 'title' => $this->resolveTitleFromURI($uri)], $_SESSION['page_history'])) {
+        // Добавляем каждую посещенную страницу в начало истории
         array_unshift($_SESSION['page_history'], $new_entry);
         $_SESSION['page_history'] = array_slice($_SESSION['page_history'], 0, 10);
     }
-        }
 
-        $method = $_SERVER['REQUEST_METHOD'];
-        $context = $this->getContext();
+    $method = $_SERVER['REQUEST_METHOD'];
+    $context = $this->getContext();
 
-        if ($method === 'GET') {
-            $this->get($context);
-        } elseif ($method === 'POST') {
-            $this->post($context);
-        }
+    if ($method === 'GET') {
+        $this->get($context);
+    } elseif ($method === 'POST') {
+        $this->post($context);
     }
+}
+
 
     protected function resolveTitleFromURI(string $uri): string {
         $path = parse_url($uri, PHP_URL_PATH);

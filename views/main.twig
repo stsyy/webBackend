@@ -5,9 +5,11 @@
     <div class="col-md-9">
         <h1 class="mb-4">
             {% set title = "Картины" %}
+
             {% if current_period is defined and current_period %}
                 {% set title = "Период: " ~ current_period|title %}
             {% endif %}
+
             {% if current_type is defined and current_type %}
                 {% for type in object_types %}
                     {% if type.id == current_type %}
@@ -15,6 +17,7 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
+
             {{ title }}
         </h1>
 
@@ -55,20 +58,21 @@
     </div>
 
     <div class="col-md-3">
-{% if page_history is defined and page_history|length > 0 %}
-<div class="card shadow-sm">
-    <div class="card-header">
-        <i class="fas fa-history me-2"></i>История посещений
-    </div>
-    <ul class="list-group list-group-flush">
-        {% for page in page_history %}
-            <li class="list-group-item">
-                <a href="{{ page.url }}">{{ page.title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
+        {% if page_history is defined and page_history|length > 0 %}
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <i class="fas fa-history me-2"></i>История посещений
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for entry in page_history %}
+                    {% set url = entry.url is defined ? entry.url : entry %}
+                    <li class="list-group-item">
+                        <a href="{{ url }}">{{ url|urldecode }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

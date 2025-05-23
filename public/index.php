@@ -111,6 +111,10 @@ $router->post("/edit/(?P<id>\d+)", UpdateController::class)
 ->middleware(new LoginRequiredMiddleware());
 
 $router->add("/set_welcome", SetWelcomeController::class);
+$twig->addFilter(new \Twig\TwigFilter('urldecode', function ($string) {
+    return urldecode($string);
+}));
+
 
 $router->get_or_default(Controller404::class);
 
